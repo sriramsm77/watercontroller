@@ -1,31 +1,30 @@
-# watercontroller
+#!/usr/bin/python
+#
+# This script is the brain of the water level
+#  controller.
+#
 
-## Requirements
+import RPi.GPIO as GPIO
+import time
 
-This project aims to provide the code for a sophisticated water level controller
-with the following requirements - 
+#
+# The main GPIO initialization routine
+#
+def initGPIOPins():
+    #
+    # We set the GPIO mode to board, which means
+    # that the pin numbers are the actual pin numbers
+    # as depicted in the Raspberry PI diagrams
+    #
+    GPIO.setmode(GPIO.BOARD)
 
-1. Support 4+1+1 (overflow), water-inlet) sensors from tank
-2. Support 3 sensors from sump
-     Total of 9 GPIO inputs
-3. One more GPIO for relay to turn ON/OFF the motor
-4. Must have wifi 
-    a. Display a webpage through which 
-	(i) status can be read 
-	(ii) actions like turning on motor can be done
-5. Must send email if SUMP is critically low
-6. (Optional) Must be able to turn ON a relay to control Borewell
-	OR
-   Must replace borewell controller as well.
-	- Same inputs to tank but sump inputs will be ignored
-	- If borewell is not pumping up water, it will be turned off after
-		a preset amount of time
-7. Must have ability to turn OFF motor if there is a DRY RUN of motor.
-8. Have an LCD to display IP address and also, tank, sump and motor status.
-	- Paged display on pressing a button
-        - We can use the small LCD instead of the 3 line LCD
+    # Set the input and output modes for all the required
+    #  GPIO pins 
 
-## Pin associations
+    '''
+    Pin associations
+    ----------------
+
     LCD connections
     ----------------
     #1   - 3.3v - Vcc for LCD (128x64)
@@ -98,4 +97,17 @@ with the following requirements -
     ------------------
     #33 - Buzzer - turned on when there is an error
     #34 - Ground - Buzzer ground
+
+    '''
+
+    GPIO.setup(7, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+ 
+if __name__ == '__main__':
+    while True:
+        if GPIO.input(7):
+            print("Pin 7 is HIGH")
+        else:
+            print("Pin 7 is LOW")
+        time.sleep(1)
 
